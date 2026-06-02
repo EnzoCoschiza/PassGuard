@@ -86,3 +86,37 @@ Servicios:
 - backend API: `http://localhost:8000`
 
 El frontend se sirve con `nginx` y proxyea `/health` y `/password` al contenedor `backend`.
+
+## SonarQube
+
+La configuracion del analisis queda en `sonar-project.properties`.
+
+### Servidor local para demo
+
+Para levantar SonarQube local con Docker Compose:
+
+```powershell
+docker compose --profile quality up -d
+```
+
+Servicios extra del perfil `quality`:
+
+- SonarQube: `http://localhost:9000`
+- PostgreSQL interno para SonarQube
+
+### Integracion con GitHub Actions
+
+El workflow queda en `.github/workflows/sonarqube.yml`.
+
+Antes de usarlo, hay que configurar en GitHub:
+
+1. Secret del repositorio: `SONAR_TOKEN`
+2. Variable del repositorio: `SONAR_HOST_URL`
+
+Ejemplo de `SONAR_HOST_URL` para un servidor accesible desde GitHub:
+
+```text
+https://tu-sonarqube.example.com
+```
+
+Si esos valores no estan configurados, el workflow informa el faltante y omite el escaneo.
