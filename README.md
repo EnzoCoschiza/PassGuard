@@ -43,6 +43,12 @@ npm run lint
 npm run build
 ```
 
+En produccion, el frontend toma la URL del backend desde `frontend/.env.production`:
+
+```text
+VITE_API_BASE_URL=https://passguard-8j7p.onrender.com
+```
+
 ## Pipeline local minimo
 
 El flujo local recomendado antes de integrar CI remota es:
@@ -72,6 +78,20 @@ Que hace en cada `push` a `main` o `master` y en cada `pull_request`:
    - corre `npm run test`
    - corre `npm run build`
 
+El deploy de GitHub Pages queda en `.github/workflows/pages.yml`.
+
+Antes de usarlo:
+
+1. En GitHub, ir a `Settings` -> `Pages`
+2. En `Source`, elegir `GitHub Actions`
+3. Hacer push a `main`
+
+La URL final del sitio quedara con el formato:
+
+```text
+https://enzog.github.io/PassGuard/
+```
+
 ## Docker
 
 Para levantar el proyecto completo con contenedores:
@@ -86,6 +106,16 @@ Servicios:
 - backend API: `http://localhost:8000`
 
 El frontend se sirve con `nginx` y proxyea `/health` y `/password` al contenedor `backend`.
+
+## CORS del backend
+
+El backend permite por defecto estos origenes:
+
+- `http://localhost:5173`
+- `http://127.0.0.1:5173`
+- `https://enzog.github.io`
+
+Si queres cambiarlo en Render, defini la variable de entorno `CORS_ORIGINS` con origenes separados por comas.
 
 ## SonarCloud
 

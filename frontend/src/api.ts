@@ -17,8 +17,10 @@ export type AnalyzePasswordResponse = {
   failed_rules: string[];
 };
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, "") ?? "";
+
 export async function analyzePassword(password: string): Promise<AnalyzePasswordResponse> {
-  const response = await fetch("/password/analyze", {
+  const response = await fetch(`${apiBaseUrl}/password/analyze`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ password }),
