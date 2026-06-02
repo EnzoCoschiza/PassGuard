@@ -52,3 +52,37 @@ El flujo local recomendado antes de integrar CI remota es:
 3. `cd frontend && npm run lint`
 4. `cd frontend && npm run test`
 5. `cd frontend && npm run build`
+
+## GitHub Actions
+
+El workflow de CI queda en `.github/workflows/ci.yml`.
+
+Que hace en cada `push` a `main` o `master` y en cada `pull_request`:
+
+1. Backend:
+   - instala Python 3.11
+   - instala `uv`
+   - ejecuta `uv sync --dev`
+   - corre `uv run ruff check .`
+   - corre `uv run pytest`
+2. Frontend:
+   - instala Node 20
+   - ejecuta `npm ci`
+   - corre `npm run lint`
+   - corre `npm run test`
+   - corre `npm run build`
+
+## Docker
+
+Para levantar el proyecto completo con contenedores:
+
+```powershell
+docker compose up --build
+```
+
+Servicios:
+
+- frontend: `http://localhost:8080`
+- backend API: `http://localhost:8000`
+
+El frontend se sirve con `nginx` y proxyea `/health` y `/password` al contenedor `backend`.
