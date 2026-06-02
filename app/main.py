@@ -17,6 +17,8 @@ def _allowed_origins() -> list[str]:
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "https://enzocoschiza.github.io/PassGuard/",
+        "https://enzocoschiza.github.io",
+        "https://enzocoschiza.github.io/PassGuard",
     ]
 
 
