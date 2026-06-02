@@ -87,13 +87,27 @@ Servicios:
 
 El frontend se sirve con `nginx` y proxyea `/health` y `/password` al contenedor `backend`.
 
-## SonarQube
+## SonarCloud
 
 La configuracion del analisis queda en `sonar-project.properties`.
 
-### Servidor local para demo
+### Integracion con GitHub Actions
 
-Para levantar SonarQube local con Docker Compose:
+El workflow queda en `.github/workflows/sonarqube.yml`.
+
+Antes de usarlo, hay que configurar en GitHub:
+
+1. Hacer el repositorio publico o verificar que entre en el free tier de SonarCloud.
+2. Crear la organizacion/proyecto en SonarCloud.
+3. Reemplazar `sonar.organization=REPLACE_WITH_SONARCLOUD_ORG` en `sonar-project.properties`.
+4. Si SonarCloud genera un `projectKey` distinto, actualizar tambien `sonar.projectKey`.
+5. Crear el secret del repositorio `SONAR_TOKEN`.
+
+Con SonarCloud no hace falta definir `SONAR_HOST_URL` en GitHub Actions.
+
+### SonarQube local opcional
+
+Si queres mantener un servidor local para demo:
 
 ```powershell
 docker compose --profile quality up -d
@@ -103,20 +117,3 @@ Servicios extra del perfil `quality`:
 
 - SonarQube: `http://localhost:9000`
 - PostgreSQL interno para SonarQube
-
-### Integracion con GitHub Actions
-
-El workflow queda en `.github/workflows/sonarqube.yml`.
-
-Antes de usarlo, hay que configurar en GitHub:
-
-1. Secret del repositorio: `SONAR_TOKEN`
-2. Variable del repositorio: `SONAR_HOST_URL`
-
-Ejemplo de `SONAR_HOST_URL` para un servidor accesible desde GitHub:
-
-```text
-https://tu-sonarqube.example.com
-```
-
-Si esos valores no estan configurados, el workflow informa el faltante y omite el escaneo.

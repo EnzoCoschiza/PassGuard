@@ -1,4 +1,4 @@
-name: SonarQube
+name: SonarCloud
 
 on:
   workflow_dispatch:
@@ -6,14 +6,14 @@ on:
     branches:
       - main
       - master
+  pull_request:
 
 jobs:
-  sonarqube:
-    name: SonarQube Scan
+  sonarcloud:
+    name: SonarCloud Scan
     runs-on: ubuntu-latest
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
 
     steps:
       - name: Checkout repository
@@ -21,15 +21,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Skip if SonarQube is not configured
-        if: ${{ env.SONAR_TOKEN == '' || env.SONAR_HOST_URL == '' }}
+      - name: Skip if SonarCloud token is not configured
+        if: ${{ env.SONAR_TOKEN == '' }}
         run: |
-          echo "SONAR_TOKEN or SONAR_HOST_URL is not configured."
-          echo "Define the repository secret SONAR_TOKEN and the repository variable SONAR_HOST_URL."
+          echo "SONAR_TOKEN is not configured."
+          echo "Define the repository secret SONAR_TOKEN."
 
-      - name: Run SonarQube scan
-        if: ${{ env.SONAR_TOKEN != '' && env.SONAR_HOST_URL != '' }}
+      - name: Run SonarCloud scan
+        if: ${{ env.SONAR_TOKEN != '' }}
         uses: SonarSource/sonarqube-scan-action@v8.1.0
         env:
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
