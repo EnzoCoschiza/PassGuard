@@ -1,0 +1,29 @@
+name: Linear Traceability
+
+on:
+  pull_request:
+
+jobs:
+  linear-ticket:
+    name: Linear issue reference
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check PR references a Linear issue
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+          LINEAR_KEY_PATTERN: 'PASS-[0-9]+'
+        run: |
+          shopt -s nocasematch
+          combined="${PR_TITLE} ${PR_BODY} ${PR_BRANCH}"
+
+          if [[ "$combined" =~ $LINEAR_KEY_PATTERN ]]; then
+            echo "Found Linear issue reference: ${BASH_REMATCH[0]}"
+            exit 0
+          fi
+
+          echo "No Linear issue reference found."
+          echo "Use the PASS-123 format in the PR title, branch name, or body."
+          exit 1

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PassGuard CI/CD Demo Slide</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f6f7fb;
+        color: #172033;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+      }
+
+      .slide {
+        width: min(1280px, 100vw);
+        aspect-ratio: 16 / 9;
+        background: #ffffff;
+        box-shadow: 0 24px 60px rgb(15 23 42 / 18%);
+        box-sizing: border-box;
+        padding: 52px 64px;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        gap: 28px;
+      }
+
+      header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 44px;
+        line-height: 1.05;
+      }
+
+      .subtitle {
+        margin: 10px 0 0;
+        color: #59657a;
+        font-size: 21px;
+      }
+
+      .logo-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+        max-width: 520px;
+      }
+
+      .logo {
+        border: 1px solid #d7dce7;
+        border-radius: 8px;
+        padding: 8px 11px;
+        font-weight: 700;
+        font-size: 15px;
+        background: #fbfcff;
+      }
+
+      .diagram {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 18px;
+        align-items: stretch;
+      }
+
+      .node {
+        border: 2px solid #d9e0ec;
+        border-radius: 8px;
+        padding: 24px;
+        display: grid;
+        align-content: center;
+        gap: 10px;
+        position: relative;
+      }
+
+      .node strong {
+        font-size: 24px;
+      }
+
+      .node span {
+        color: #5d687c;
+        font-size: 17px;
+        line-height: 1.35;
+      }
+
+      .node::after {
+        content: "->";
+        position: absolute;
+        right: -20px;
+        top: 50%;
+        translate: 0 -50%;
+        color: #69758a;
+        font-weight: 800;
+        font-size: 22px;
+      }
+
+      .node:nth-child(3)::after,
+      .node:nth-child(6)::after {
+        display: none;
+      }
+
+      .feedback {
+        border-color: #6d5dfc;
+        background: #f5f3ff;
+      }
+
+      .quality {
+        border-color: #14a46c;
+        background: #f0fdf7;
+      }
+
+      .deploy {
+        border-color: #f59f00;
+        background: #fff8e6;
+      }
+
+      footer {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 24px;
+        color: #4f5b70;
+        font-size: 18px;
+      }
+
+      footer strong {
+        color: #172033;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="slide">
+      <header>
+        <div>
+          <h1>PassGuard CI/CD</h1>
+          <p class="subtitle">Feedback trazable, validacion automatizada y deploy controlado</p>
+        </div>
+        <div class="logo-row" aria-label="Herramientas utilizadas">
+          <div class="logo">Linear</div>
+          <div class="logo">GitHub</div>
+          <div class="logo">Actions</div>
+          <div class="logo">Docker</div>
+          <div class="logo">Sonar</div>
+          <div class="logo">FastAPI</div>
+          <div class="logo">React</div>
+          <div class="logo">Vite</div>
+        </div>
+      </header>
+
+      <section class="diagram" aria-label="Esquema CI/CD">
+        <article class="node feedback">
+          <strong>1. Feedback</strong>
+          <span>Linear registra el cambio solicitado con ID PASS-123.</span>
+        </article>
+        <article class="node">
+          <strong>2. Repositorio</strong>
+          <span>GitHub recibe branch, commit y pull request vinculados al issue.</span>
+        </article>
+        <article class="node quality">
+          <strong>3. CI</strong>
+          <span>Ruff, pytest, ESLint, Vitest y build validan calidad y contrato funcional.</span>
+        </article>
+        <article class="node quality">
+          <strong>4. Inspeccion</strong>
+          <span>SonarCloud/SonarQube agrega analisis estatico opcional.</span>
+        </article>
+        <article class="node deploy">
+          <strong>5. Deploy gate</strong>
+          <span>Smoke test verifica el artefacto antes de publicar Pages.</span>
+        </article>
+        <article class="node deploy">
+          <strong>6. Entrega</strong>
+          <span>GitHub Pages publica solo si todos los checks pasan.</span>
+        </article>
+      </section>
+
+      <footer>
+        <div><strong>Demo fallida:</strong> un PR intenta permitir anios como 2026 y CI lo rechaza por romper la regla SDD de seguridad.</div>
+        <div><strong>Demo exitosa:</strong> se corrige el PR, se mergea a main y CD despliega el frontend.</div>
+      </footer>
+    </main>
+  </body>
+</html>

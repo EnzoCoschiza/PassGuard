@@ -47,6 +47,16 @@ jobs:
       - name: Build frontend
         run: npm run build
 
+      - name: Run deploy smoke test
+        working-directory: .
+        run: |
+          cd frontend
+          npm exec vite -- preview --host 127.0.0.1 --port 4173 &
+          preview_pid=$!
+          cd ..
+          trap "kill $preview_pid" EXIT
+          node scripts/deploy-smoke-test.mjs "http://127.0.0.1:4173/${{ github.event.repository.name }}/" "/${{ github.event.repository.name }}/"
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

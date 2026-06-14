@@ -8,6 +8,7 @@ Proyecto academico para demostrar un flujo de calidad e integracion continua alr
 - `tests/`: tests del backend
 - `frontend/`: frontend React + Vite
 - `docs/`: especificaciones funcionales
+- `scripts/`: utilidades locales para reproducir CI
 
 ## Backend con uv y entorno virtual
 
@@ -59,6 +60,15 @@ El flujo local recomendado antes de integrar CI remota es:
 4. `cd frontend && npm run test`
 5. `cd frontend && npm run build`
 
+Tambien podes correr el set principal con un solo comando:
+
+```powershell
+.\scripts\run-ci-checks.ps1
+```
+
+El runner usa un cache local en `.cache/uv` para evitar problemas con el cache
+global de `uv` en entornos Windows restringidos.
+
 ## GitHub Actions
 
 El workflow de CI queda en `.github/workflows/ci.yml`.
@@ -78,6 +88,19 @@ Que hace en cada `push` a `main` o `master` y en cada `pull_request`:
    - corre `npm run test`
    - corre `npm run build`
 
+## Demo de CI/CD
+
+Para preparar una exposicion con PRs que fallen y PRs que aprueben sin romper `main`:
+
+- guia practica: `docs/cicd-demo-guide.md`
+- slide unico: `docs/cicd-demo-slide.html`
+- plantilla de PR: `.github/pull_request_template.md`
+- runner local: `.\scripts\run-ci-checks.ps1`
+
+La demo usa Linear como plataforma de feedback. Cada PR debe referenciar un
+issue con formato `PASS-123` en el titulo, la rama o el cuerpo; el workflow
+`Linear Traceability` falla si no encuentra esa trazabilidad.
+
 El deploy de GitHub Pages queda en `.github/workflows/pages.yml`.
 
 Antes de usarlo:
@@ -86,10 +109,14 @@ Antes de usarlo:
 2. En `Source`, elegir `GitHub Actions`
 3. Hacer push a `main`
 
+Antes de publicar, el workflow levanta el artefacto buildado con `vite preview`
+y ejecuta `scripts/deploy-smoke-test.mjs`. Si el HTML o los assets no responden
+en la base esperada de GitHub Pages, el deploy queda bloqueado.
+
 La URL final del sitio quedara con el formato:
 
 ```text
-https://enzog.github.io/PassGuard/
+https://enzocoschiza.github.io/PassGuard/
 ```
 
 ## Docker
@@ -113,7 +140,8 @@ El backend permite por defecto estos origenes:
 
 - `http://localhost:5173`
 - `http://127.0.0.1:5173`
-- `https://enzog.github.io`
+- `https://enzocoschiza.github.io/PassGuard`
+- `https://enzocoschiza.github.io`
 
 Si queres cambiarlo en Render, defini la variable de entorno `CORS_ORIGINS` con origenes separados por comas.
 
